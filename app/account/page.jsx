@@ -1,3 +1,4 @@
+import { auth } from "../_lib/auth"
 
 export const metadata = {
 
@@ -6,9 +7,10 @@ export const metadata = {
 
 
 
-export default function page() {
+export default async function page() {
+  const session = await auth()
   return (
-    <div>account</div>
+    <div>Welcome, {session?.user?.name}</div>
   )
 }
 

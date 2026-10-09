@@ -138,17 +138,31 @@ export async function getSettings() {
   return data;
 }
 
+
 export async function getCountries() {
   try {
     const res = await fetch(
-      'https://api.restcountries.com//countries/v5?response_fields=names.common,flag.emoji',
+      'https://api.restcountries.com/countries/v5?limit=100&response_fields=names.common,flag.url_svg',
       {
-        headers: { 'Authorization': `Bearer ${process.env.RESTCOUNTRIESKEY}` }
+        headers: {
+          Authorization: `Bearer ${process.env.RESTCOUNTRIESKEY}`,
+        },
       }
     );
-    const countries = await res.json();
-    return countries.data.objects;
-  } catch {
+
+    if (!res.ok) {
+      throw new Error(`Request failed: ${res.status}`);
+    }
+
+    const result = await res.json();
+
+    if (result.errors?.length) {
+      throw new Error(result.errors[0].message);
+    }
+
+    return result.data.objects;
+  } catch (error) {
+    console.error('getCountries:', error);
     throw new Error('Could not fetch countries');
   }
 }
