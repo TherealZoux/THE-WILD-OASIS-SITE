@@ -4,7 +4,6 @@ import { getCountries } from '@/app/_lib/data-service';
 
 async function SelectCountry({ defaultCountry, name, id, className }) {
   const countries = await getCountries();
-  console.log(countries)
   const flag =
     countries.find((country) => country.names.common.toLowerCase() === defaultCountry.toLowerCase())?.flag.url_svg ?? '';
 
